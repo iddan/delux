@@ -1,6 +1,6 @@
 <h1>
     <img
-        src="https://raw.githubusercontent.com/aniddan/delux/master/assets/delux.svg"
+        src="https://cdn.rawgit.com/aniddan/delux/master/assets/delux.svg"
         style="height: 2em; margin-right: 5px;"
     />
     Delux
@@ -150,6 +150,7 @@ store.collectionName.on(['actionType'], (action, state) => {
 | action | The dispatched action |
 | state  | The collection state  |
 
+[Delux Logo]: https://cdn.rawgit.com/aniddan/delux/master/assets/delux.svg
 [Immutability in JavaScript]: https://www.sitepoint.com/immutability-javascript/
 [FSA]: https://github.com/acdlite/flux-standard-action
 [Promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
