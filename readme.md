@@ -1,7 +1,7 @@
 <h1>
     <img
         src="https://cdn.rawgit.com/aniddan/delux/master/assets/delux.svg"
-        height="48"
+        height="32"
     />
     Delux
 </h1>
