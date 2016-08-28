@@ -1,0 +1,14 @@
+{
+  "name": "delux",
+  "version": "0.0.2",
+  "description": "Beautiful, light and simple state manager inspired by Redux",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Iddan Aharonson",
+  "license": "MIT",
+  "dependencies": {
+      "es6-promise": ""
+  }
+}
