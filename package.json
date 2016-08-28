@@ -1,14 +1,29 @@
 {
-  "name": "delux",
-  "version": "0.0.2",
-  "description": "Beautiful, light and simple state manager inspired by Redux",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Iddan Aharonson",
-  "license": "MIT",
-  "dependencies": {
-      "es6-promise": ""
-  }
+    "name": "Delux",
+    "version": "v1.0.0",
+    "description": "Beautiful, light and simple state manager inspired by Redux",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:aniddan/delux.git"
+    },
+    "keywords": [
+        "state",
+        "manager",
+        "immutable",
+        "redux",
+        "flux"
+    ],
+    "scripts": {
+        "test": "node test.js"
+    },
+    "author": "Iddan Aharonson <mail@iddan.co> (http://iddan.co)",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/aniddan/delux/issues"
+    },
+    "homepage": "https://github.com/aniddan/delux",
+    "dependencies": {
+        "es6-promise": "3.2.1"
+    }
 }
