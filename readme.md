@@ -12,18 +12,20 @@ Beautiful, light and simple state manager inspired by Redux
 import Store from 'delux';
 
 let store = new Store ();
+
 store.tasks = new Store.Collection ({tasks: []});
 
-store.on('addTask', (action, state) => state.tasks.push(action.payload));
+store.tasks.on('addTask', (action, state) => state.push({
+    name: action.payload,
+    completed: false
+}));
 
-store.observe('tasks', state => console.log(state));
+store.observe('tasks', (state) => console.log(state.tasks));
 
 store.dispatch({
     type: 'addTask',
-    payload: {
-        name: 'Try Redux'
-    }
-})
+    payload: 'Try Redux'
+});
 
 ```
 ## Features
@@ -52,9 +54,17 @@ let store = new Store();
 
 Stores are objects whose prototype has methods to mutate there state. The Store's state is hold in [Collections](#Collection) assigned to it.
 
-#### Store instances methods
+#### Store instances
 
-##### Store.prototype.dispatch()
+##### Properties
+
+###### Store.prototype.state
+
+Returns an object with mutations of the collections' states
+
+##### Methods
+
+###### Store.prototype.dispatch()
 
 Dispatches a [Flux Standard Action][FSA] on the state
 
@@ -67,7 +77,7 @@ store.dispatch({
 });
 ```
 
-##### Store.prototype.observe()
+###### Store.prototype.observe()
 
 Adds an observer for mutations in the store's collections
 
@@ -79,13 +89,12 @@ store.observe(['collectionName'], (state) => {
 
 **Parameters**
 
-- **collectionNames** - array of collection names to observe their state mutation
+- **names | name** - array of collection names or a single name to observe for state mutation
 - **observer** - a function that with a given state mutation receives the name of the changed collection and it's new state. The arguments to the function are as follows:
 
 | Name       | Supplied Value               |
 |------------|----------------------------- |
-| name       | The changed collection name  |
-| state      | The changed collection state |
+| state      | Store.prototype.state alias  |
 
 ##### Store.prototype.use()
 
@@ -141,7 +150,7 @@ store.collectionName.on(['actionType'], (action, state) => {
 
 **Parameters**
 
-- **types** - array of action types to apply the reducer on
+- **types | type** - array of action types or a single type to apply the reducer on
 - **reducer** - a function that with a given action mutates the collection state. The arguments to the function are as follows:
 
 

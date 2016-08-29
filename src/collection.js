@@ -1,4 +1,5 @@
 const ArrayTree = require('./arraytree');
+const validateArray = require('./validate-array');
 
 module.exports = class Collection {
     constructor (init = {}) {
@@ -6,7 +7,7 @@ module.exports = class Collection {
         let reducers = new ArrayTree({multiple: false});
         Object.defineProperties(this, {
             on: {value: (types, reducer) => {
-                reducers.set(types, reducer);
+                reducers.set(validateArray(types), reducer);
                 return this;
             }},
             state: {get: () => {

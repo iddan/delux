@@ -23,7 +23,7 @@ store.use(action => {
     });
 });
 
-// MIDDLEWARES ACCURE SYNCRONIOUSLY
+// MIDDLEWARES ACCURE IN ORDER
 
 store.use(action => {
     return action.payload.response.json().then(response => {
@@ -32,7 +32,7 @@ store.use(action => {
 });
 
 // gets state from a getter
-store.images.on(['getAllImages'], (action, state) => {
+store.images.on('getAllImages', (action, state) => {
     for (let image of action.payload.response) {
         state[image.id] = image;
     }
@@ -46,7 +46,8 @@ store.images.on(['removeAllImages'], (action, state) => {
 });
 
 // React anybody?
-store.observe(['images'], console.log);
+store.observe('images', (state) => console.log(state.images));
+store.observe(['images'], (state) => console.log(state.images));
 
 // flux actions, so pretty
 store.dispatch({

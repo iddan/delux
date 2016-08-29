@@ -1,5 +1,6 @@
 const Collection = require('./collection');
 const ArrayTree = require('./arraytree');
+const validateArray = require('./validate-array');
 
 module.exports = class Store {
     constructor () {
@@ -10,17 +11,43 @@ module.exports = class Store {
                 value: Promise.resolve(),
                 writable: true
             },
-            use: {value: (middleware) => {
-                middlewares.push(middleware);
-                return this;
-            }},
-            observe: {value: (collections, observer) => {
-                observers.set(collections, observer);
-                return this;
-            }},
-            middlewares: {get: () => Object.assign([], middlewares)},
-            observers: {get: () => ArrayTree.toImmutable(observers)}
+            middlewares: {
+                get: () => Object.assign([], middlewares)
+            },
+            observers: {
+                get: () => ArrayTree.toImmutable(observers)
+            },
+            use: {
+                value: (middleware) => {
+                    middlewares.push(middleware);
+                    return this;
+                }
+            },
+            observe: {
+                value: (collections, observer) => {
+                    observers.set(validateArray(collections), observer);
+                    return this;
+                }
+            }
         });
+    }
+    get state () {
+        let state = {};
+        for (let key in this) {
+            Object.defineProperty(state, key, {
+                get: () => {
+                    let value = this[key];
+                    if (value instanceof Collection) {
+                        return value.state;
+                    }
+                    else {
+                        return value;
+                    }
+                },
+                enumerable: true
+            });
+        }
+        return state;
     }
     dispatch (action) {
         this.queue = this.queue.then(applyMiddlewares.bind(this, action))
@@ -28,13 +55,13 @@ module.exports = class Store {
             for (let collection_name in this) {
                 let collection = this[collection_name];
                 if (collection instanceof Collection) {
-                    let {state} = collection;
-                    let reducer = collection.reducers.get(action.type);
+                    let {state, reducers} = collection;
+                    let reducer = reducers.get(action.type);
                     if (reducer) {
                         Promise.resolve(reducer.call(this, action, state))
                         .then(() => {
                             for (let observer of this.observers.get(collection_name)) {
-                                observer(collection_name, state);
+                                observer(this.state);
                             }
                         });
                     }
