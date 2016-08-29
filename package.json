@@ -1,5 +1,5 @@
 {
-  "name": "Delux",
+  "name": "delux",
   "version": "1.1.0",
   "description": "Beautiful, light and simple state manager inspired by Redux",
   "main": "index.js",
