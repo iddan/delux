@@ -1,4 +1,4 @@
-const Store = require('.');
+const Store = require('./lib/index');
 const {Collection} = Store;
 
 let fetch = () => Promise.resolve({
@@ -32,22 +32,24 @@ store.use(action => {
 });
 
 // gets state from a getter
-store.images.on('getAllImages', (action, state) => {
+store.images.on('getAllImages', (state, action) => {
     for (let image of action.payload.response) {
         state[image.id] = image;
     }
+    return Object.assign({}, state);
 });
 
 // don't worry you can do this
-store.images.on(['removeAllImages'], (action, state) => {
+store.images.on(['removeAllImages'], (state) => {
     for (let key in state) {
         delete state[key];
     }
+    return Object.assign({}, state);
 });
 
 // React anybody?
 store.observe('images', (state) => console.log(state.images));
-store.observe(['images'], (state) => console.log(state.images));
+store.observe(['images'], (state, action) => console.log(state.images));
 
 // flux actions, so pretty
 store.dispatch({

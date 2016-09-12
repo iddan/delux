@@ -1,82 +1,42 @@
-const Collection = require('./collection');
-const ArrayTree = require('./arraytree');
-const validateArray = require('./validate-array');
+import Collection from './collection';
+import {ensureArray} from './utils';
 
-module.exports = class Store {
-    constructor () {
-        let middlewares = [];
-        let observers = new ArrayTree;
-        Object.defineProperties(this, {
-            queue: {
-                value: Promise.resolve(),
-                writable: true
-            },
-            middlewares: {
-                get: () => Object.assign([], middlewares)
-            },
-            observers: {
-                get: () => ArrayTree.toImmutable(observers)
-            },
-            use: {
-                value: (middleware) => {
-                    middlewares.push(middleware);
-                    return this;
-                }
-            },
-            observe: {
-                value: (collections, observer) => {
-                    observers.set(validateArray(collections), observer);
-                    return this;
-                }
-            }
-        });
-    }
-    get state () {
-        let state = {};
-        for (let key in this) {
-            Object.defineProperty(state, key, {
-                get: () => {
-                    let value = this[key];
-                    if (value instanceof Collection) {
-                        return value.state;
-                    }
-                    else {
-                        return value;
-                    }
-                },
-                enumerable: true
-            });
-        }
-        return state;
+export default class Store {
+    middlewares = [];
+    queued      = Promise.resolve();
+    state       = {};
+    use (middleware) {
+        this.middlewares.push(middleware);
     }
     dispatch (action) {
-        this.queue = this.queue.then(applyMiddlewares.bind(this, action))
-        .then(action => {
-            for (let collection_name in this) {
-                let collection = this[collection_name];
+        for (let middleware of this.middlewares) {
+            this.queue(() => Promise.resolve(middleware(action)));
+        }
+        this.queue(() => {
+            for (let name in this) {
+                let collection = this[name];
                 if (collection instanceof Collection) {
-                    let {state, reducers} = collection;
-                    let reducer = reducers.get(action.type);
-                    if (reducer) {
-                        Promise.resolve(reducer.call(this, action, state))
-                        .then(() => {
-                            for (let observer of this.observers.get(collection_name)) {
-                                observer(this.state);
+                    let oldState = collection.state;
+                    Promise.resolve(collection.reducers[action.type](oldState, action))
+                    .then((newState = oldState) => {
+                        if (newState !== oldState) {
+                            collection.state = newState;
+                            for (let observer of collection.observers) {
+                                observer(Object.assign(this.state, {[name]: newState}), action, name);
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             }
         });
     }
-};
-
-function applyMiddlewares (action) {
-    let middlewares_queue = Promise.resolve();
-    for (let middleware of this.middlewares) {
-        middlewares_queue = middlewares_queue.then(middleware.bind(this, action));
+    observe (collectionNames, observer) {
+        collectionNames = ensureArray(collectionNames);
+        for (let name of collectionNames) {
+            this[name].observers.push(observer);
+        }
     }
-    return middlewares_queue.then(() => action);
+    queue (callback) {
+        this.queued = this.queued.then(callback);
+    }
 }
-
-module.exports.Collection = Collection;

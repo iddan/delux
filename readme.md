@@ -15,7 +15,7 @@ let store = new Store ();
 
 store.tasks = new Store.Collection ({tasks: []});
 
-store.tasks.on('addTask', (action, state) => state.push({
+store.tasks.on('addTask', (tasks, action) => tasks.concat({
     name: action.payload,
     completed: false
 }));
@@ -24,10 +24,15 @@ store.observe('tasks', (state) => console.log(state.tasks));
 
 store.dispatch({
     type: 'addTask',
-    payload: 'Try Redux'
+    payload: 'Try Delux'
 });
-
 ```
+## Motivation
+
+- In Flux there's a design flaw: it's hard to manage several stores.
+- So came Redux with one store.
+- But: Redux lacks a defined API
+
 ## Features
 
 - [Immutable][Immutability in JavaScript]
@@ -36,7 +41,6 @@ store.dispatch({
 - [Flux Standard Actions][FSA]
 - [Ordered middlewares][Express Middlewares]
 - [No switches nor returns required][Redux Reducers]
-
 
 ## API Reference
 
@@ -110,6 +114,16 @@ store.use((action) => {
 
 - **middlware** - a function that mutates a given action. If it returns a Promise the store will wait for the promise to complete before passing it to the next middleware and the reducers.
 
+##### Store.prototype.queue()
+
+Adds a function to the store's execute queue
+
+```JavaScript
+store.queue(() => callback());
+```
+
+###### Parameters
+
 ### Collection
 
 Collections holds a sub-state (similar to [Flux Stores][Flux Stores]) and it's mutation logic
@@ -130,11 +144,15 @@ store.collectionName = new Collection (init);
 
 ###### Collection.prototype.state
 
-Returns a new mutation of the collections's state
+Reflects the collections's state
 
 ###### Collection.prototype.reducers
 
 Reflects the collections's reducers
+
+###### Collection.prototype.observers
+
+Reflects the collections's observers
 
 ##### Methods
 
