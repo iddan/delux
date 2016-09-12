@@ -40,7 +40,7 @@ store.dispatch({
 - [Extendible classes][Subclassing]
 - [Flux Standard Actions][FSA]
 - [Ordered middlewares][Express Middlewares]
-- [No switches nor returns required][Redux Reducers]
+- [No switches or combinations required][Redux Reducers]
 
 ## API Reference
 
@@ -161,7 +161,7 @@ Reflects the collections's observers
 Attach a reducer to received actions ([Node style][Node EventEmitter On])
 
 ```JavaScript
-store.collectionName.on(['actionType'], (action, state) => {
+store.collectionName.on(['actionType'], (state, action) => {
 
 });
 ```
@@ -169,13 +169,13 @@ store.collectionName.on(['actionType'], (action, state) => {
 **Parameters**
 
 - **types | type** - array of action types or a single type to apply the reducer on
-- **reducer** - a function that with a given action mutates the collection state. The arguments to the function are as follows:
+- **reducer** - a function that with a given action mutates the collection state and returns the new state. The arguments to the function are as follows:
 
 
 | Name   | Supplied Value        |
 |--------|-----------------------|
-| action | The dispatched action |
 | state  | The collection state  |
+| action | The dispatched action |
 
 [Delux Logo]: https://cdn.rawgit.com/aniddan/delux/master/assets/delux.svg
 [Immutability in JavaScript]: https://www.sitepoint.com/immutability-javascript/
