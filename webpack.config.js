@@ -1,25 +1,17 @@
-const path = require('path');
-
 module.exports = {
+    entry: './src/index.js',
     module: {
         loaders: [
             {
                 test: /\.js$/,
+                include: /src/,
                 loader: 'babel'
             },
         ]
     },
-    resolve: {
-        root: [
-            path.resolve('./')
-        ]
-    },
-    entry: {
-        'lib/index.js': './src/index.js',
-    },
     output: {
-        path: '.',
-        filename: '[name]',
+        path: 'bin',
+        filename: 'index.js',
         library: 'delux',
         libraryTarget: 'umd',
         umdNamedDefine: true

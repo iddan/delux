@@ -81,6 +81,10 @@ store.dispatch({
 });
 ```
 
+**Returns**
+
+The mutated store state
+
 ###### Store.prototype.observe()
 
 Adds an observer for mutations in the store's collections
@@ -120,6 +124,14 @@ Adds a function to the store's execute queue
 
 ```JavaScript
 store.queue(() => callback());
+```
+
+##### Store.prototype.state.get()
+
+Get specific collection's state from the store's state
+
+```JavaScript
+let partialState = store.state.get(collectionNames);
 ```
 
 ###### Parameters

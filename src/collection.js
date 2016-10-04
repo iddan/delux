@@ -1,15 +1,14 @@
-import {ensureArray} from './utils';
+const {forceArray} = require('./utils');
 
-export default class Collection {
+module.exports = class Collection {
     reducers    = {};
     observers   = [];
     constructor (init) {
         this.state = init;
     }
     on (types, reducer) {
-        types = ensureArray(types);
-        for (let type of types) {
+        for (let type of forceArray(types)) {
             this.reducers[type] = reducer;
         }
     }
-}
+};

@@ -1,7 +1,6 @@
-import Store from './store';
-import Collection from './collection';
+const Store = require('./store');
+const Collection = require('./collection');
 require('es6-promise').polyfill();
 
-Store.Collection = Collection;
-
 module.exports = Store;
+module.exports.Collection = Collection;

@@ -1,14 +1,9 @@
-const Store = require('./lib/index');
+/* globals it, expect */
+
+const Store = require('.');
 const {Collection} = Store;
 
-let fetch = () => Promise.resolve({
-    json: () => Promise.resolve([{
-        id: 'foo',
-        image_url: 'http://bar.com'
-    }])
-});
-
-let store = new Store;
+const store = new Store;
 
 // collections are sub classes with init
 store.images = new Store.Collection({});
@@ -47,12 +42,8 @@ store.images.on(['removeAllImages'], (state) => {
     return Object.assign({}, state);
 });
 
-// React anybody?
-store.observe('images', (state) => console.log(state.images));
-store.observe(['images'], (state, action) => console.log(state.images));
-
 // flux actions, so pretty
-store.dispatch({
+it ('returns the new store state', () => store.dispatch({
     type: 'getAllImages',
     payload: {
         request: {
@@ -60,4 +51,21 @@ store.dispatch({
             method: 'get'
         },
     }
+})
+.then(({images}) => expect(images).toEqual({
+    foo: {
+        id: 'foo',
+        image_url: 'http://bar.com'
+    }
+})));
+
+// look at these results!
+
+store.observe('images', ({images}) => console.log('observed a change in images: ', images));
+
+const fetch = () => Promise.resolve({
+    json: () => Promise.resolve([{
+        id: 'foo',
+        image_url: 'http://bar.com'
+    }])
 });
