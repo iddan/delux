@@ -64,13 +64,13 @@ Stores are objects whose prototype has methods to mutate there state. The Store'
 
 ###### Store.prototype.state
 
-Returns an object with mutations of the collections' states
+Object with mutations of the collections' states.
 
 ##### Methods
 
 ###### Store.prototype.dispatch()
 
-Dispatches a [Flux Standard Action][FSA] on the state
+Dispatches a [Flux Standard Action][FSA] on the state.
 
 ```JavaScript
 store.dispatch({
@@ -83,7 +83,7 @@ store.dispatch({
 
 **Returns**
 
-The mutated store state
+A promise which resolves to the the mutated store state.
 
 ###### Store.prototype.observe()
 
@@ -109,14 +109,14 @@ store.observe(['collectionName'], (state) => {
 Adds a middlware to the action resolution process
 
 ```JavaScript
-store.use((action) => {
-
-});
+store.use(middleware|type|{type: middleware});
 ```
 
 **Parameters**
 
 - **middlware** - a function that mutates a given action. If it returns a Promise the store will wait for the promise to complete before passing it to the next middleware and the reducers.
+
+- **type** - action type to apply middleware on.
 
 ##### Store.prototype.queue()
 

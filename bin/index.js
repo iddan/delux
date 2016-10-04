@@ -183,6 +183,8 @@ module.exports = { forceArray: forceArray, getByKeys: getByKeys };
 "use strict";
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -215,10 +217,35 @@ module.exports = function () {
 
         /**
          * Append middleware
-         * @param {function} middleware
+         * @param {function|string|object} middleware
          */
         value: function use(middleware) {
-            this.middlewares.push(middleware);
+            var _this = this;
+
+            var _arguments = Array.prototype.slice.call(arguments);
+
+            var arg0 = _arguments[0];
+            var arg1 = _arguments[1];
+
+            ({
+                function: function _function() {
+                    return _this.middlewares.push(middleware);
+                },
+                string: function string() {
+                    return _this.middlewares.push(function (action) {
+                        if (action.type === arg0) {
+                            arg1(action);
+                        }
+                    });
+                },
+                object: function object() {
+                    return _this.middlewares.push(function (action) {
+                        if (arg0[action.type]) {
+                            arg1[action.type](action);
+                        }
+                    });
+                }
+            })[typeof arg0 === 'undefined' ? 'undefined' : _typeof(arg0)]();
         }
         /**
          * Dispatch an action
@@ -229,7 +256,7 @@ module.exports = function () {
     }, {
         key: 'dispatch',
         value: function dispatch(action) {
-            var _this = this;
+            var _this2 = this;
 
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
@@ -239,7 +266,7 @@ module.exports = function () {
                 var _loop = function _loop() {
                     var middleware = _step.value;
 
-                    _this.queue(function () {
+                    _this2.queue(function () {
                         return Promise.resolve(middleware(action));
                     });
                 };
@@ -263,10 +290,10 @@ module.exports = function () {
             }
 
             return this.queue(function () {
-                return Promise.all(Object.keys(_this).filter(function (name) {
-                    return _this[name] instanceof Collection && _this[name].reducers[action.type];
+                return Promise.all(Object.keys(_this2).filter(function (name) {
+                    return _this2[name] instanceof Collection && _this2[name].reducers[action.type];
                 }).map(function (name) {
-                    var collection = _this[name];
+                    var collection = _this2[name];
                     var state = collection.state;
                     var reducers = collection.reducers;
 
@@ -283,7 +310,7 @@ module.exports = function () {
                                 for (var _iterator2 = collection.observers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                                     var observer = _step2.value;
 
-                                    observer(Object.assign(_this.state, _defineProperty({}, name, newCollectionState)), action, name);
+                                    observer(Object.assign(_this2.state, _defineProperty({}, name, newCollectionState)), action, name);
                                 }
                             } catch (err) {
                                 _didIteratorError2 = true;
@@ -303,7 +330,7 @@ module.exports = function () {
                         return newCollectionState;
                     });
                 })).then(function () {
-                    return _this.state;
+                    return _this2.state;
                 });
             });
         }

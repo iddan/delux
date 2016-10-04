@@ -1,25 +1,44 @@
 const Collection = require('./collection');
 const {forceArray, getByKeys} = require('./utils');
 
+/**
+ * The Store holds the whole application state and it's mutation logic.
+ */
 module.exports = class Store {
     middlewares = [];
     queued      = Promise.resolve();
+    /**
+     * object with mutations of the collections' states
+     */
     state       = {
         get (collections) {
             return getByKeys(this, collections);
         }
     };
     /**
-     * Append middleware
-     * @param {function} middleware
+     * Adds an observer for mutations in the store's collections
+     * @param {function|string|object} middleware|type|{type:middleware}
      */
     use (middleware) {
-        this.middlewares.push(middleware);
+        const [arg0, arg1] = arguments;
+        ({
+            function: () => this.middlewares.push(middleware),
+            string: () => this.middlewares.push((action) => {
+                if (action.type === arg0) {
+                    arg1(action);
+                }
+            }),
+            object: () => this.middlewares.push((action) => {
+                if (arg0[action.type]) {
+                    arg1[action.type](action);
+                }
+            })
+        })[typeof arg0]();
     }
     /**
-     * Dispatch an action
+     * Dispatches a Flux Standard Action on the state.
      * @param {object} action
-     * @returns {Promise} - resolves after the store state mutate
+     * @returns {Promise} - resolves to the mutated store state.
      */
     dispatch (action) {
         for (let middleware of this.middlewares) {
@@ -53,7 +72,7 @@ module.exports = class Store {
         );
     }
     /**
-     * Observe collections changes
+     * Adds an observer for mutations in the store's collections.
      * @param {string | array} collectionNames - collections to observe
      * @param {function} observer
      */
@@ -63,7 +82,7 @@ module.exports = class Store {
         }
     }
     /**
-     * Queue an action in the store's queue
+     * Adds a function to the store's execute queue
      * @param {function} action
      * @returns {Promise} - resolves after the action resolves.
      */
