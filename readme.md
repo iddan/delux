@@ -109,7 +109,7 @@ store.observe(['collectionName'], (state) => {
 Adds a middlware to the action resolution process
 
 ```JavaScript
-store.use(middleware|type|{type: middleware});
+store.use(middleware|type|{type: middleware}, <middleware>);
 ```
 
 **Parameters**

@@ -198,6 +198,9 @@ var _require = __webpack_require__(1);
 var forceArray = _require.forceArray;
 var getByKeys = _require.getByKeys;
 
+/**
+ * The Store holds the whole application state and it's mutation logic.
+ */
 
 module.exports = function () {
     function Store() {
@@ -211,13 +214,18 @@ module.exports = function () {
             }
         };
     }
+    /**
+     * object with mutations of the collections' states
+     */
+
 
     _createClass(Store, [{
         key: 'use',
 
         /**
-         * Append middleware
-         * @param {function|string|object} middleware
+         * Adds an observer for mutations in the store's collections
+         * @param {function|string|object} middleware|type|{type:middleware}
+         * @param {function} middleware
          */
         value: function use(middleware) {
             var _this = this;
@@ -241,16 +249,16 @@ module.exports = function () {
                 object: function object() {
                     return _this.middlewares.push(function (action) {
                         if (arg0[action.type]) {
-                            arg1[action.type](action);
+                            arg0[action.type](action);
                         }
                     });
                 }
             })[typeof arg0 === 'undefined' ? 'undefined' : _typeof(arg0)]();
         }
         /**
-         * Dispatch an action
+         * Dispatches a Flux Standard Action on the state.
          * @param {object} action
-         * @returns {Promise} - resolves after the store state mutate
+         * @returns {Promise} - resolves to the mutated store state.
          */
 
     }, {
@@ -335,7 +343,7 @@ module.exports = function () {
             });
         }
         /**
-         * Observe collections changes
+         * Adds an observer for mutations in the store's collections.
          * @param {string | array} collectionNames - collections to observe
          * @param {function} observer
          */
@@ -369,7 +377,7 @@ module.exports = function () {
             }
         }
         /**
-         * Queue an action in the store's queue
+         * Adds a function to the store's execute queue
          * @param {function} action
          * @returns {Promise} - resolves after the action resolves.
          */

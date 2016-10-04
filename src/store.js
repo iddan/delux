@@ -18,6 +18,7 @@ module.exports = class Store {
     /**
      * Adds an observer for mutations in the store's collections
      * @param {function|string|object} middleware|type|{type:middleware}
+     * @param {function} middleware
      */
     use (middleware) {
         const [arg0, arg1] = arguments;
@@ -30,7 +31,7 @@ module.exports = class Store {
             }),
             object: () => this.middlewares.push((action) => {
                 if (arg0[action.type]) {
-                    arg1[action.type](action);
+                    arg0[action.type](action);
                 }
             })
         })[typeof arg0]();
