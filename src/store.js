@@ -6,15 +6,23 @@ const {forceArray, getByKeys} = require('./utils');
  */
 module.exports = class Store {
     middlewares = [];
-    queued      = Promise.resolve();
+    queued = Promise.resolve();
     /**
      * object with mutations of the collections' states
      */
-    state       = {
-        get (collections) {
-            return getByKeys(this, collections);
-        }
-    };
+    get state () {
+        return Object.keys(this).reduce((state, name) => {
+            let collection = this[name];
+            if (collection instanceof Collection) {
+                state[name] = collection.state;
+            }
+            return state;
+        }, {
+            get (collections) {
+                return getByKeys(this, collections);
+            }
+        });
+    }
     /**
      * Adds an observer for mutations in the store's collections
      * @param {function|string|object} middleware|type|{type:middleware}
@@ -76,6 +84,7 @@ module.exports = class Store {
      * Adds an observer for mutations in the store's collections.
      * @param {string | array} collectionNames - collections to observe
      * @param {function} observer
+     * @returns {undefined}
      */
     observe (collectionNames, observer) {
         for (let name of forceArray(collectionNames)) {
@@ -84,7 +93,7 @@ module.exports = class Store {
     }
     /**
      * Adds a function to the store's execute queue
-     * @param {function} action
+     * @param {function} action - function to apply
      * @returns {Promise} - resolves after the action resolves.
      */
     queue (action) {

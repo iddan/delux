@@ -60,8 +60,8 @@ it ('returns the new store state', () => store.dispatch({
 })));
 
 // look at these results!
-
-store.observe('images', ({images}) => console.log('observed a change in images: ', images));
+store.observe('images', (state) => console.log({state}));
+store.observe('images', (state) => console.log('observed a change in images: ', state.get('images')));
 
 const fetch = () => Promise.resolve({
     json: () => Promise.resolve([{

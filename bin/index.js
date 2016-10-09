@@ -208,16 +208,7 @@ module.exports = function () {
 
         this.middlewares = [];
         this.queued = Promise.resolve();
-        this.state = {
-            get: function get(collections) {
-                return getByKeys(this, collections);
-            }
-        };
     }
-    /**
-     * object with mutations of the collections' states
-     */
-
 
     _createClass(Store, [{
         key: 'use',
@@ -346,6 +337,7 @@ module.exports = function () {
          * Adds an observer for mutations in the store's collections.
          * @param {string | array} collectionNames - collections to observe
          * @param {function} observer
+         * @returns {undefined}
          */
 
     }, {
@@ -378,7 +370,7 @@ module.exports = function () {
         }
         /**
          * Adds a function to the store's execute queue
-         * @param {function} action
+         * @param {function} action - function to apply
          * @returns {Promise} - resolves after the action resolves.
          */
 
@@ -386,6 +378,27 @@ module.exports = function () {
         key: 'queue',
         value: function queue(action) {
             return this.queued = this.queued.then(action);
+        }
+    }, {
+        key: 'state',
+
+        /**
+         * object with mutations of the collections' states
+         */
+        get: function get() {
+            var _this3 = this;
+
+            return Object.keys(this).reduce(function (state, name) {
+                var collection = _this3[name];
+                if (collection instanceof Collection) {
+                    state[name] = collection.state;
+                }
+                return state;
+            }, {
+                get: function get(collections) {
+                    return getByKeys(this, collections);
+                }
+            });
         }
     }]);
 
