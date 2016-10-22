@@ -1,0 +1,276 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Delux by aniddan</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Delux</h1>
+        <p>Beautiful, light and simple state manager inspired by Redux</p>
+
+        <p class="view"><a href="https://github.com/aniddan/delux">View the Project on GitHub <small>aniddan/delux</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/aniddan/delux/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/aniddan/delux/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/aniddan/delux">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="--------delux" class="anchor" href="#--------delux" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+    <img src="https://cdn.rawgit.com/aniddan/delux/master/assets/delux.svg" height="32">
+    Delux
+</h1>
+
+<p>Beautiful, light and simple state manager inspired by Redux</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-smi">Store</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>delux<span class="pl-pds">'</span></span>;
+
+<span class="pl-k">let</span> store <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Store</span> ();
+
+<span class="pl-smi">store</span>.<span class="pl-smi">tasks</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Store.Collection</span> ({tasks<span class="pl-k">:</span> []});
+
+<span class="pl-smi">store</span>.<span class="pl-smi">tasks</span>.<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>addTask<span class="pl-pds">'</span></span>, (<span class="pl-smi">tasks</span>, <span class="pl-smi">action</span>) <span class="pl-k">=&gt;</span> <span class="pl-smi">tasks</span>.<span class="pl-c1">concat</span>({
+    name<span class="pl-k">:</span> <span class="pl-smi">action</span>.<span class="pl-smi">payload</span>,
+    completed<span class="pl-k">:</span> <span class="pl-c1">false</span>
+}));
+
+<span class="pl-smi">store</span>.<span class="pl-c1">observe</span>(<span class="pl-s"><span class="pl-pds">'</span>tasks<span class="pl-pds">'</span></span>, (<span class="pl-smi">state</span>) <span class="pl-k">=&gt;</span> <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-smi">state</span>.<span class="pl-smi">tasks</span>));
+
+<span class="pl-smi">store</span>.<span class="pl-en">dispatch</span>({
+    type<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>addTask<span class="pl-pds">'</span></span>,
+    payload<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Try Delux<span class="pl-pds">'</span></span>
+});</pre></div>
+
+<h2>
+<a id="motivation" class="anchor" href="#motivation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Motivation</h2>
+
+<ul>
+<li>In Flux there's a design flaw: it's hard to manage several stores.</li>
+<li>So came Redux with one store.</li>
+<li>But: Redux lacks a defined API</li>
+</ul>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li><a href="https://www.sitepoint.com/immutability-javascript/">Immutable</a></li>
+<li><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise Based</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Sub_classing_with_extends">Extendible classes</a></li>
+<li><a href="https://github.com/acdlite/flux-standard-action">Flux Standard Actions</a></li>
+<li><a href="https://www.safaribooksonline.com/blog/2014/03/10/express-js-middleware-demystified/">Ordered middlewares</a></li>
+<li><a href="http://redux.js.org/docs/basics/Reducers.html">No switches or combinations required</a></li>
+</ul>
+
+<h2>
+<a id="api-reference" class="anchor" href="#api-reference" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Reference</h2>
+
+<h3>
+<a id="store" class="anchor" href="#store" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Store</h3>
+
+<p>The Store holds the whole application state and it's mutation logic.</p>
+
+<h5>
+<a id="create-a-store" class="anchor" href="#create-a-store" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create a Store</h5>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">let</span> store <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Store</span>();</pre></div>
+
+<h4>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Description</h4>
+
+<p>Stores are objects whose prototype has methods to mutate there state. The Store's state is hold in <a href="#Collection">Collections</a> assigned to it.</p>
+
+<h4>
+<a id="store-instances" class="anchor" href="#store-instances" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Store instances</h4>
+
+<h5>
+<a id="properties" class="anchor" href="#properties" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Properties</h5>
+
+<h6>
+<a id="storeprototypestate" class="anchor" href="#storeprototypestate" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Store.prototype.state</h6>
+
+<p>Object with mutations of the collections' states.</p>
+
+<h5>
+<a id="methods" class="anchor" href="#methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Methods</h5>
+
+<h6>
+<a id="storeprototypedispatch" class="anchor" href="#storeprototypedispatch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Store.prototype.dispatch()</h6>
+
+<p>Dispatches a <a href="https://github.com/acdlite/flux-standard-action">Flux Standard Action</a> on the state.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">store</span>.<span class="pl-en">dispatch</span>({
+    type<span class="pl-k">:</span> <span class="pl-k">&lt;</span>string <span class="pl-k">|</span> symbol<span class="pl-k">&gt;</span>,
+    payload<span class="pl-k">:</span> <span class="pl-k">&lt;</span>object<span class="pl-k">&gt;</span>
+    error<span class="pl-k">:</span> <span class="pl-k">&lt;</span>boolean<span class="pl-k">&gt;</span>,
+    meta<span class="pl-k">:</span> <span class="pl-k">&lt;</span>any<span class="pl-k">&gt;</span>
+});</pre></div>
+
+<p><strong>Returns</strong></p>
+
+<p>A promise which resolves to the the mutated store state.</p>
+
+<h6>
+<a id="storeprototypeobserve" class="anchor" href="#storeprototypeobserve" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Store.prototype.observe()</h6>
+
+<p>Adds an observer for mutations in the store's collections</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">store</span>.<span class="pl-c1">observe</span>([<span class="pl-s"><span class="pl-pds">'</span>collectionName<span class="pl-pds">'</span></span>], (<span class="pl-smi">state</span>) <span class="pl-k">=&gt;</span> {
+
+});</pre></div>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+<li>
+<strong>names | name</strong> - array of collection names or a single name to observe for state mutation</li>
+<li>
+<strong>observer</strong> - a function that with a given state mutation receives the name of the changed collection and it's new state. The arguments to the function are as follows:</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Supplied Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>state</td>
+<td>Store.prototype.state alias</td>
+</tr>
+</tbody>
+</table>
+
+<h5>
+<a id="storeprototypeuse" class="anchor" href="#storeprototypeuse" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Store.prototype.use()</h5>
+
+<p>Adds a middlware to the action resolution process</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">store</span>.<span class="pl-en">use</span>(middleware<span class="pl-k">|</span>type<span class="pl-k">|</span>{type<span class="pl-k">:</span> middleware}, <span class="pl-k">&lt;</span>middleware<span class="pl-k">&gt;</span>);</pre></div>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+<li><p><strong>middlware</strong> - a function that mutates a given action. If it returns a Promise the store will wait for the promise to complete before passing it to the next middleware and the reducers.</p></li>
+<li><p><strong>type</strong> - action type to apply middleware on.</p></li>
+</ul>
+
+<h5>
+<a id="storeprototypequeue" class="anchor" href="#storeprototypequeue" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Store.prototype.queue()</h5>
+
+<p>Adds a function to the store's execute queue</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">store</span>.<span class="pl-en">queue</span>(() <span class="pl-k">=&gt;</span> <span class="pl-en">callback</span>());</pre></div>
+
+<h5>
+<a id="storeprototypestateget" class="anchor" href="#storeprototypestateget" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Store.prototype.state.get()</h5>
+
+<p>Get specific collection's state from the store's state</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">let</span> partialState <span class="pl-k">=</span> <span class="pl-smi">store</span>.<span class="pl-smi">state</span>.<span class="pl-c1">get</span>(collectionNames);</pre></div>
+
+<h6>
+<a id="parameters" class="anchor" href="#parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Parameters</h6>
+
+<h3>
+<a id="collection" class="anchor" href="#collection" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Collection</h3>
+
+<p>Collections holds a sub-state (similar to <a href="https://facebook.github.io/flux/docs/overview.html#stores">Flux Stores</a>) and it's mutation logic</p>
+
+<h4>
+<a id="assign-a-collection" class="anchor" href="#assign-a-collection" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Assign a Collection</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">store</span>.<span class="pl-smi">collectionName</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Collection</span> (init);</pre></div>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+<li>
+<strong>init</strong> - The initial state of the collection</li>
+</ul>
+
+<h4>
+<a id="collection-instances" class="anchor" href="#collection-instances" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Collection instances</h4>
+
+<h5>
+<a id="properties-1" class="anchor" href="#properties-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Properties</h5>
+
+<h6>
+<a id="collectionprototypestate" class="anchor" href="#collectionprototypestate" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Collection.prototype.state</h6>
+
+<p>Reflects the collections's state</p>
+
+<h6>
+<a id="collectionprototypereducers" class="anchor" href="#collectionprototypereducers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Collection.prototype.reducers</h6>
+
+<p>Reflects the collections's reducers</p>
+
+<h6>
+<a id="collectionprototypeobservers" class="anchor" href="#collectionprototypeobservers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Collection.prototype.observers</h6>
+
+<p>Reflects the collections's observers</p>
+
+<h5>
+<a id="methods-1" class="anchor" href="#methods-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Methods</h5>
+
+<h6>
+<a id="collectionprototypeon" class="anchor" href="#collectionprototypeon" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Collection.prototype.on()</h6>
+
+<p>Attach a reducer to received actions (<a href="https://nodejs.org/api/events.html#events_emitter_on_eventname_listener">Node style</a>)</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">store</span>.<span class="pl-smi">collectionName</span>.<span class="pl-en">on</span>([<span class="pl-s"><span class="pl-pds">'</span>actionType<span class="pl-pds">'</span></span>], (<span class="pl-smi">state</span>, <span class="pl-smi">action</span>) <span class="pl-k">=&gt;</span> {
+
+});</pre></div>
+
+<p><strong>Parameters</strong></p>
+
+<ul>
+<li>
+<strong>types | type</strong> - array of action types or a single type to apply the reducer on</li>
+<li>
+<strong>reducer</strong> - a function that with a given action mutates the collection state and returns the new state. The arguments to the function are as follows:</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Supplied Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>state</td>
+<td>The collection state</td>
+</tr>
+<tr>
+<td>action</td>
+<td>The dispatched action</td>
+</tr>
+</tbody>
+</table>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/aniddan">aniddan</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
