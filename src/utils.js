@@ -1,11 +1,8 @@
-let forceArray = array => Array.isArray(array) ? array : [array];
+export let forceArray = array => Array.isArray(array) ? array : [array];
 
-function getByKeys (object, keys) {
-    let relevant = {};
-    for (let key of forceArray(keys)) {
-        relevant[key] = object[key];
-    }
-    return relevant;
-}
-
-module.exports = {forceArray, getByKeys};
+export let getByKeys = (object, keys) =>
+    forceArray(keys)
+    .reduce(
+        (relevant, key) => Object.assign(relevant, {[key]: object[key]}),
+        {}
+    );

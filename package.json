@@ -15,9 +15,9 @@
     "flux"
   ],
   "scripts": {
-    "start": "webpack --progress --watch",
-    "build": "webpack --progress",
-    "test": "jest"
+    "start": "npm run build -- --watch",
+    "build": "babel src --out-dir bin",
+    "test": "jest $2"
   },
   "author": "Iddan Aharonson <mail@iddan.co> (http://iddan.co)",
   "license": "MIT",
@@ -26,15 +26,16 @@
   },
   "homepage": "https://github.com/aniddan/delux",
   "dependencies": {
-    "es6-promise": "3.2.1"
+    "es6-promise": "3.2.1",
+    "flux-standard-action": "^0.6.1"
   },
   "devDependencies": {
-    "babel-core": "^6.14.0",
-    "babel-loader": "^6.2.5",
+    "babel-cli": "^6.18.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-stage-0": "^6.5.0",
-    "jest": "^16.0.0",
-    "webpack": "^2.1.0-beta.25"
+    "chai": "^3.5.0",
+    "chokidar": "^1.6.1",
+    "jest": "^16.0.0"
   },
   "babel": {
     "presets": [
