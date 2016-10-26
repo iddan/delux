@@ -1,6 +1,6 @@
 {
   "name": "delux",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Beautiful, light and simple state manager inspired by Redux",
   "main": "bin/index.js",
   "repository": {
