@@ -31,28 +31,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var Store = function () {
 	function Store() {
+		var _this = this,
+		    _arguments2 = arguments;
+
 		_classCallCheck(this, Store);
 
 		this.middlewares = [];
 		this.queued = Promise.resolve();
-	}
 
-	_createClass(Store, [{
-		key: 'use',
-
-		/**
-   * Adds an observer for mutations in the store's collections
-   * @param {function|string|object} middleware|type|{type:middleware}
-   * @param {function} middleware - function to execute each time an action dispatches before it reaches the reducers.
-   * @returns {Store} this
-   */
-		value: function use(middleware) {
-			var _arguments = Array.prototype.slice.call(arguments);
+		this.use = function (middleware) {
+			var _arguments = Array.prototype.slice.call(_arguments2);
 
 			var arg0 = _arguments[0];
 			var arg1 = _arguments[1];
 
-			this.middlewares.push({
+			_this.middlewares.push({
 				// store.use(function)
 				function: middleware,
 				// store.use(string, function)
@@ -69,21 +62,12 @@ var Store = function () {
 					}
 				}
 			}[typeof arg0 === 'undefined' ? 'undefined' : _typeof(arg0)]);
-			return this;
-		}
-		/**
-   * Dispatches a Flux Standard Action on the state.
-   * @param {object} action - FSA
-   * @returns {Promise} - resolves to the mutated store state.
-   */
+			return _this;
+		};
 
-	}, {
-		key: 'dispatch',
-		value: function dispatch(action) {
-			var _this = this;
-
-			var middlewares = this.middlewares;
-			var collectionEntries = this.collectionEntries;
+		this.dispatch = function (action) {
+			var middlewares = _this.middlewares;
+			var collectionEntries = _this.collectionEntries;
 
 			if (!(0, _fluxStandardAction.isFSA)(action)) {
 				throw new TypeError('Dispatched action must follow the Flux Standard Action scheme. https://github.com/acdlite/flux-standard-action');
@@ -121,7 +105,7 @@ var Store = function () {
 				}
 			}
 
-			return this.queue(function () {
+			return _this.queue(function () {
 				return Promise.all(collectionEntries.map(function (_ref) {
 					var _ref2 = _slicedToArray(_ref, 2);
 
@@ -172,17 +156,9 @@ var Store = function () {
 					throw err;
 				});
 			});
-		}
-		/**
-   * Subscribes for mutations in the store's collections.
-   * @param {string | array} collectionNames - collections to subscribe to.
-   * @param {function} subscriber - function to execute each time the collection state mutates
-   * @returns {undefined}
-   */
+		};
 
-	}, {
-		key: 'subscribe',
-		value: function subscribe(collectionNames, subscriber) {
+		this.subscribe = function (collectionNames, subscriber) {
 			var _iteratorNormalCompletion3 = true;
 			var _didIteratorError3 = false;
 			var _iteratorError3 = undefined;
@@ -191,7 +167,7 @@ var Store = function () {
 				for (var _iterator3 = (0, _utils.forceArray)(collectionNames)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
 					var name = _step3.value;
 
-					this[name].subscribers.push(subscriber);
+					_this[name].subscribers.push(subscriber);
 				}
 			} catch (err) {
 				_didIteratorError3 = true;
@@ -207,17 +183,9 @@ var Store = function () {
 					}
 				}
 			}
-		}
-		/**
-   * Unsubscribes the subscriber function provided for the collections.
-   * @param {string | array} collectionNames - collections to unsubscribe to.
-   * @param {function} subscriber - a function that was assigned for those collections mutations.
-   * @returns {undefined}
-   */
+		};
 
-	}, {
-		key: 'unsubscribe',
-		value: function unsubscribe(collectionNames, subscriber) {
+		this.unsubscribe = function (collectionNames, subscriber) {
 			var _iteratorNormalCompletion4 = true;
 			var _didIteratorError4 = false;
 			var _iteratorError4 = undefined;
@@ -226,7 +194,7 @@ var Store = function () {
 				for (var _iterator4 = (0, _utils.forceArray)(collectionNames)[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
 					var name = _step4.value;
 
-					this[name].subscribers = this[name].subscribers.filter(function (func) {
+					_this[name].subscribers = _this[name].subscribers.filter(function (func) {
 						return func === subscriber;
 					});
 				}
@@ -244,19 +212,14 @@ var Store = function () {
 					}
 				}
 			}
-		}
-		/**
-   * Adds a function to the store's execute queue
-   * @param {function} action - function to apply
-   * @returns {Promise} - resolves after the action resolves.
-   */
+		};
 
-	}, {
-		key: 'queue',
-		value: function queue(action) {
-			return this.queued = this.queued.then(action);
-		}
-	}, {
+		this.queue = function (action) {
+			return _this.queued = _this.queued.then(action);
+		};
+	}
+
+	_createClass(Store, [{
 		key: 'state',
 
 		/**
@@ -300,6 +263,39 @@ var Store = function () {
 				return entry[1] instanceof _collection2.default;
 			});
 		}
+		/**
+   * Adds an observer for mutations in the store's collections
+   * @param {function|string|object} middleware|type|{type:middleware}
+   * @param {function} middleware - function to execute each time an action dispatches before it reaches the reducers.
+   * @returns {Store} this
+   */
+
+		/**
+   * Dispatches a Flux Standard Action on the state.
+   * @param {object} action - FSA
+   * @returns {Promise} - resolves to the mutated store state.
+   */
+
+		/**
+   * Subscribes for mutations in the store's collections.
+   * @param {string | array} collectionNames - collections to subscribe to.
+   * @param {function} subscriber - function to execute each time the collection state mutates
+   * @returns {undefined}
+   */
+
+		/**
+   * Unsubscribes the subscriber function provided for the collections.
+   * @param {string | array} collectionNames - collections to unsubscribe to.
+   * @param {function} subscriber - a function that was assigned for those collections mutations.
+   * @returns {undefined}
+   */
+
+		/**
+   * Adds a function to the store's execute queue
+   * @param {function} action - function to apply
+   * @returns {Promise} - resolves after the action resolves.
+   */
+
 	}]);
 
 	return Store;

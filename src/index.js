@@ -1,4 +1,5 @@
 import Store from './store';
-export Collection from './collection';
+import Collection from './collection';
 
-export default Store;
+module.exports = Store;
+module.exports.Collection = Collection;

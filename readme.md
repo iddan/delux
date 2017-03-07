@@ -9,18 +9,18 @@
 Beautiful, light and simple state manager inspired by Redux
 
 ```JavaScript
-import Store from 'delux';
+import Store, { Collection } from 'delux';
 
 let store = new Store ();
 
-store.tasks = new Store.Collection ({tasks: []});
+store.tasks = new Collection ({tasks: []});
 
 store.tasks.on('addTask', (tasks, action) => tasks.concat({
     name: action.payload,
     completed: false
 }));
 
-store.observe('tasks', (state) => console.log(state.tasks));
+store.subscribe('tasks', (state) => console.log(state.tasks));
 
 store.dispatch({
     type: 'addTask',
@@ -85,20 +85,20 @@ store.dispatch({
 
 A promise which resolves to the the mutated store state.
 
-###### Store.prototype.observe()
+###### Store.prototype.subscribe()
 
-Adds an observer for mutations in the store's collections
+Adds an subscriber for mutations in the store's collections
 
 ```JavaScript
-store.observe(['collectionName'], (state) => {
+store.subscribe(['collectionName'], (state) => {
 
 });
 ```
 
 **Parameters**
 
-- **names | name** - array of collection names or a single name to observe for state mutation
-- **observer** - a function that with a given state mutation receives the name of the changed collection and it's new state. The arguments to the function are as follows:
+- **names | name** - array of collection names or a single name to subscribe for state mutation
+- **subscriber** - a function that with a given state mutation receives the name of the changed collection and it's new state. The arguments to the function are as follows:
 
 | Name       | Supplied Value               |
 |------------|----------------------------- |
@@ -162,9 +162,9 @@ Reflects the collections's state
 
 Reflects the collections's reducers
 
-###### Collection.prototype.observers
+###### Collection.prototype.subscribers
 
-Reflects the collections's observers
+Reflects the collections's subscribers
 
 ##### Methods
 

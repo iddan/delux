@@ -6,7 +6,7 @@ export default class State {
 			this[name] = collection.state;
 		}
 	}
-	get(names) {
+	get = (names) => {
 		return getByKeys(this, names);
 	}
 }

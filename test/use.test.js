@@ -35,8 +35,7 @@ it('applies middlewares', () => {
 		if (action.type === 'hop') {
 			expect(action.hip).to.be.true;
 			expect(action.general).to.be.true;
-		}
-		else if (action.type === 'addLove') {
+		} else if (action.type === 'addLove') {
 			expect(action.addLove).to.be.equal(1);
 			expect(action.general).to.be.true;
 		}

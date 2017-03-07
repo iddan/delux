@@ -39,7 +39,7 @@ export default class Store {
      * @param {function} middleware - function to execute each time an action dispatches before it reaches the reducers.
      * @returns {Store} this
      */
-	use(middleware) {
+	use = (middleware) => {
 		const [arg0, arg1] = arguments;
 		this.middlewares.push({
 			// store.use(function)
@@ -64,7 +64,7 @@ export default class Store {
      * @param {object} action - FSA
      * @returns {Promise} - resolves to the mutated store state.
      */
-	dispatch(action) {
+	dispatch = (action) => {
 		const { middlewares, collectionEntries } = this;
 		if (!isFSA(action)) {
 			throw new TypeError('Dispatched action must follow the Flux Standard Action scheme. https://github.com/acdlite/flux-standard-action');
@@ -104,7 +104,7 @@ export default class Store {
      * @param {function} subscriber - function to execute each time the collection state mutates
      * @returns {undefined}
      */
-	subscribe(collectionNames, subscriber) {
+	subscribe = (collectionNames, subscriber) => {
 		for (let name of forceArray(collectionNames)) {
 			this[name].subscribers.push(subscriber);
 		}
@@ -115,7 +115,7 @@ export default class Store {
      * @param {function} subscriber - a function that was assigned for those collections mutations.
      * @returns {undefined}
      */
-	unsubscribe(collectionNames, subscriber) {
+	unsubscribe = (collectionNames, subscriber) => {
 		for (let name of forceArray(collectionNames)) {
 			this[name].subscribers = this[name].subscribers.filter(func => func === subscriber);
 		}
@@ -125,7 +125,7 @@ export default class Store {
      * @param {function} action - function to apply
      * @returns {Promise} - resolves after the action resolves.
      */
-	queue(action) {
+	queue = (action) => {
 		return this.queued = this.queued.then(action);
 	}
 }
