@@ -1,6 +1,4 @@
 import Store from './store';
-import Collection from './collection';
-require('es6-promise').polyfill();
+export Collection from './collection';
 
-module.exports = Store;
-module.exports.Collection = Collection;
+export default Store;

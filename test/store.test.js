@@ -1,6 +1,6 @@
 /* globals it */
-const {expect} = require('chai');
-const Store = require('..');
+import {expect} from 'chai';
+import Store from '..';
 
 let store = new Store();
 

@@ -1,0 +1,6 @@
+{
+	"extends": "fbjs",
+	"rules": {
+		"indent": [1, "tab"]
+	}
+}

@@ -2,7 +2,7 @@
   "name": "delux",
   "version": "1.5.0",
   "description": "Beautiful, light and simple state manager inspired by Redux",
-  "main": "bin/index.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:aniddan/delux.git"
@@ -16,32 +16,29 @@
   ],
   "scripts": {
     "start": "npm run build -- --watch",
-    "build": "babel src --out-dir bin",
+    "build": "babel src --out-dir dist",
     "test": "jest $2"
   },
   "author": "Iddan Aharonson <mail@iddan.co> (http://iddan.co)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/aniddan/delux/issues"
+    "url": "https://github.com/iddan/delux/issues"
   },
-  "homepage": "https://github.com/aniddan/delux",
+  "homepage": "https://github.com/iddan/delux",
   "dependencies": {
-    "es6-promise": "3.2.1",
     "flux-standard-action": "^0.6.1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
-    "babel-preset-es2015": "^6.14.0",
+    "babel-eslint": "^7.1.1",
+    "babel-preset-env": "^1.2.1",
     "babel-preset-stage-0": "^6.5.0",
     "chai": "^3.5.0",
     "chokidar": "^1.6.1",
+    "eslint": "^3.17.1",
+    "eslint-config-fbjs": "^1.1.1",
+    "eslint-plugin-babel": "^4.1.1",
     "jest": "^16.0.0"
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "stage-0"
-    ]
   },
   "jest": {
     "testEnvironment": "node"
